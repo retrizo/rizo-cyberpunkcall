@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(dir \"C:\\Qbox Server\\txData\\QboxLeanPack_1D0E64.base\\resources\\rizo-cyberpunkcall\\assets\")"
-    ],
-    "deny": [],
-    "ask": []
-  }
-}
