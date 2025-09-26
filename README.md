@@ -33,9 +33,6 @@ A FiveM resource that displays cyberpunk-themed call notifications with text-to-
    setr elevenlabs:similarity_boost "0.7"
    setr elevenlabs:style "0.15"
    setr elevenlabs:speaker_boost "true"
-
-   ## Rizo Speech - Mode Configuration (optional)
-   setr rizo:mode "elevenlabs"  # or "local"
    ```
 4. Replace `"your_elevenlabs_api_key_here"` with your actual ElevenLabs API key
 5. Configure the resource according to your needs (see Configuration section)
