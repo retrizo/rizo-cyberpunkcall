@@ -44,14 +44,41 @@ A FiveM resource that displays cyberpunk-themed call notifications with text-to-
 
 ## Configuration
 
-The resource supports two operation modes:
+The resource supports two operation modes, each with different characteristics:
 
-### Mode 1: ElevenLabs TTS (Default)
-Uses ElevenLabs API for AI-generated speech.
+### Comparison: ElevenLabs vs Local Files
+
+| Aspect | ElevenLabs Mode | Local Files Mode |
+|--------|----------------|------------------|
+| **Cost** | Paid service (requires ElevenLabs subscription) | Free (no external service costs) |
+| **Audio Generation** | Automatic AI voice generation from text | Manual: requires pre-recorded audio files |
+| **Timer Management** | Automatic timing based on generated audio length | Manual: requires adjusting timers for each audio file |
+| **Voice Consistency** | Consistent AI voice for all messages | Depends on recording quality and voice actor |
+| **Setup Complexity** | API key configuration only | Audio file creation + timer adjustment |
+| **Customization** | Voice settings via API parameters | Full control over audio content and quality |
+| **Network Dependency** | Requires internet connection for generation | Works offline once files are created |
+| **Implementation Time** | Immediate (just add text) | Time-intensive (record + time each audio) |
+
+Both modes are fully functional and the choice depends on your project requirements, budget, and development preferences.
+
+---
+
+### Mode 1: ElevenLabs TTS (AI Voice Generation)
+Uses ElevenLabs API for AI-generated speech. **All ElevenLabs settings are configured via server.cfg convars** (see Installation section above).
+
+**How it works:**
+- You provide text, AI generates voice automatically
+- No need to create audio files or adjust timers
+- Just write your dialogue text and the system handles the rest
+
+**Requirements:**
+- ElevenLabs API subscription (paid service)
+- Internet connection for voice generation
+- API key configuration in server.cfg
 
 ```lua
-CFG = {
-  mode = 'elevenlabs',
+RizoSpeechConfig = {
+  mode = 'elevenlabs',  -- Use ElevenLabs TTS mode
   default_volume = 1.0,
   allow_tts_fallback_when_local = false,
   precall = {
@@ -64,20 +91,40 @@ CFG = {
     enabled = true,         -- Enable Answer/Reject controls
     auto_timeout = 5000,    -- Auto-hide timeout in milliseconds (5 seconds)
     answer_key = 'E',       -- Key to answer calls (configurable)
-    reject_key = 'R',       -- Key to reject calls (configurable)
+    reject_key = 'F',       -- Key to reject calls (configurable)
     show_key_hints = true,  -- Show key hints on interface
     answer_callback = nil,  -- Custom callback for answer action
     reject_callback = nil   -- Custom callback for reject action
   }
+  -- Note: ElevenLabs settings (api_key, voice_id, etc.) are configured in server.cfg
 }
 ```
 
-### Mode 2: Local Audio Files
+### Mode 2: Local Audio Files (Manual Audio Management)
 Uses pre-recorded audio files for playback.
 
+**How it works:**
+- You record or create audio files for each dialogue line
+- Audio files are stored in the `assets/` folder
+- You manually adjust call durations to match audio length
+- Each dialogue requires its own audio file
+
+**Requirements:**
+- Pre-recorded audio files (.ogg, .mp3, .wav formats)
+- Manual timer adjustment for each audio file
+- Voice recording setup or voice actor
+- No external service costs
+
+**Development Process:**
+1. Write dialogue text
+2. Record audio for each line
+3. Save audio files in `assets/` folder
+4. Adjust `duration` parameter to match audio length
+5. Test and fine-tune timing
+
 ```lua
-CFG = {
-  mode = 'local',
+RizoSpeechConfig = {
+  mode = 'local',   -- Use local audio files mode
   default_volume = 1.0,
   allow_tts_fallback_when_local = true, -- Falls back to TTS if no local file
   precall = {
@@ -85,9 +132,37 @@ CFG = {
     ms = 2000,
     loop = false,
     volume = 0.6
+  },
+  call_buttons = {
+    enabled = true,         -- Enable Answer/Reject controls
+    auto_timeout = 5000,    -- Auto-hide timeout in milliseconds (5 seconds)
+    answer_key = 'E',       -- Key to answer calls (configurable)
+    reject_key = 'F',       -- Key to reject calls (configurable)
+    show_key_hints = true,  -- Show key hints on interface
+    answer_callback = nil,  -- Custom callback for answer action
+    reject_callback = nil   -- Custom callback for reject action
   }
 }
 ```
+
+### Choosing the Right Mode
+
+**ElevenLabs Mode** is suitable when:
+- You want rapid development and deployment
+- Budget allows for AI service subscription
+- Consistent voice quality is important
+- You have dynamic or frequently changing dialogue
+
+**Local Files Mode** is suitable when:
+- You prefer complete control over audio quality
+- No ongoing service costs are preferred
+- You have access to voice recording capabilities
+- Network connectivity may be limited
+- You want custom voice effects or specific audio styling
+
+Both modes can be switched at any time by changing the `mode` setting in `config.lua`.
+
+---
 
 ## Usage
 

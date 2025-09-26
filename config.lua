@@ -1,6 +1,6 @@
 RizoSpeechConfig = {
   -- Mode: "elevenlabs" (AI) or "local" (files)
-  mode = "local",
+  mode = "elevenlabs",
 
   -- Debug mode: enables detailed logging for troubleshooting
   debug = false,
@@ -33,14 +33,6 @@ RizoSpeechConfig = {
   -- Default speech volume
   default_volume = 1.0,
 
-  -- Padrões para ElevenLabs (podem ser sobrescritos por convars no servidor)
-  elevenlabs = {
-    voice_id   = "JBFqnCBsd6RMkjVDRZzb",
-    model_id   = "eleven_multilingual_v2", -- ex: "eleven_turbo_v2" ou "eleven_turbo_v2_5"
-    format     = "mp3_44100_128",
-    stability  = 0.55,
-    similarity = 0.7,
-    style      = 0.15,
-    speaker_boost = true,
-  }
+  -- ElevenLabs settings are configured via server.cfg convars
+  -- See README.md for server.cfg configuration examples
 }

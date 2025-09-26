@@ -932,7 +932,7 @@ RegisterCommand('voicetest2', function()
     name = 'JUDY ALVAREZ',
     subtitle = 'Hey V, you got a minute?',
     duration = 15000, -- Extended duration for 3 messages
-    sound = 'assets/ola.mp3', -- Same sound file for all messages
+    sound = 'assets/localtestvoice', -- Same sound file for all messages
     volume = 1.0
   })
 
@@ -954,7 +954,7 @@ RegisterCommand('voicetest2', function()
       exports['rizo-cyberpunkcall']:UpdateCallSubtitle(
         'JUDY ALVAREZ',
         'I found something interesting about the relic.',
-        'assets/ola.mp3', -- Same sound file
+        'assets/localtestvoice', -- Same sound file
         1.0
       )
     end)
@@ -965,7 +965,7 @@ RegisterCommand('voicetest2', function()
       exports['rizo-cyberpunkcall']:UpdateCallSubtitle(
         'JUDY ALVAREZ',
         'Meet me at the workshop when you can.',
-        'assets/ola.mp3', -- Same sound file
+        'assets/localtestvoice', -- Same sound file
         1.0
       )
     end)
@@ -1034,21 +1034,21 @@ RegisterCommand('rizo-test', function()
       avatar   = 'assets/judy.webp',
       name     = 'JUDY ALVAREZ',
       subtitle = "No, I'm tryin' to get you. Know someone at Clouds who'll take our side.",
-      sound    = 'assets/ola.mp3',  -- used in local mode
+      sound    = 'assets/localtestvoice',  -- used in local mode
       volume   = 1.0,
       duration = 4000
     },
     {
       name     = 'JUDY',
       subtitle = "Meet me at Lizzie's. Come alone.",
-      sound    = 'assets/ola.mp3',
+      sound    = 'assets/localtestvoice',
       volume   = 1.0,
       duration = 5000
     },
     {
       name     = 'JUDY',
       subtitle = "Hurry up, it's important.",
-      sound    = 'assets/ola.mp3',
+      sound    = 'assets/localtestvoice',
       volume   = 1.0,
       duration = 4000
     }
