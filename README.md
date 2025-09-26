@@ -40,7 +40,7 @@ A FiveM resource that displays cyberpunk-themed call notifications with text-to-
 4. Replace `"your_elevenlabs_api_key_here"` with your actual ElevenLabs API key
 5. Configure the resource according to your needs (see Configuration section)
 
-> ⚠️ **Security Note**: Never commit your actual API key to public repositories. Keep your ElevenLabs API key secure and consider using environment variables or secure configuration management.
+> ⚠️ **Security Note**: Always keep your apikey in server.cfg to prevent dumpers who can access your files inside the server from seeing and using your key.
 
 ## Configuration
 
