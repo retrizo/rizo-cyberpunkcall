@@ -181,6 +181,104 @@ exports['rizo-cyberpunkcall']:ShowCallNotification({
 })
 ```
 
+### Local Audio Files Example with Proper Timing
+
+When using local audio files, it's crucial to match the `duration` parameter with your actual audio file length for proper synchronization:
+
+```lua
+-- Example: Multi-line conversation with local audio files
+-- Audio files duration: judy_intro.mp3 (4s), judy_job.mp3 (3.5s), judy_urgent.mp3 (2.8s)
+
+function startJudyCall()
+  -- Initial call with first audio file (4 seconds)
+  exports['rizo-cyberpunkcall']:ShowCallNotification({
+    avatar = 'assets/judy.webp',
+    name = 'JUDY ALVAREZ',
+    subtitle = 'Hey V, got a minute to talk?',
+    duration = 15000,  -- Total call duration for all messages
+    sound = 'assets/judy_intro.mp3',  -- 4 seconds audio
+    volume = 1.0
+  })
+
+  -- Set up conversation flow when call is answered
+  local answeredHandler = AddEventHandler('rizo-cyberpunkcall:callAnswered', function()
+    RemoveEventHandler(answeredHandler)
+
+    -- Second message after 4 seconds (when first audio ends)
+    SetTimeout(4000, function()
+      exports['rizo-cyberpunkcall']:UpdateCallSubtitle(
+        'JUDY ALVAREZ',
+        'Found some intel on that corpo job.',
+        'assets/judy_job.mp3',  -- 3.5 seconds audio
+        1.0
+      )
+    end)
+
+    -- Third message after 7.5 seconds (4s + 3.5s)
+    SetTimeout(7500, function()
+      exports['rizo-cyberpunkcall']:UpdateCallSubtitle(
+        'JUDY ALVAREZ',
+        'Time is running out, V.',
+        'assets/judy_urgent.mp3',  -- 2.8 seconds audio
+        1.0
+      )
+    end)
+
+    -- Call ends automatically after total duration (15s)
+  end)
+end
+```
+
+#### Audio File Timing Guidelines:
+
+1. **Measure Your Audio Files**: Use audio editing software to get exact durations
+2. **Calculate Timing**: Each new message should start when the previous audio ends
+3. **Add Small Buffer**: Add 100-200ms between messages for natural flow
+4. **Total Duration**: Should be longer than the sum of all audio files
+
+**Example Calculation:**
+```
+Audio 1: judy_intro.mp3     = 4.0 seconds
+Audio 2: judy_job.mp3       = 3.5 seconds
+Audio 3: judy_urgent.mp3    = 2.8 seconds
+Buffer time (200ms × 2)     = 0.4 seconds
+Answer time allowance       = 4.3 seconds
+--------------------------------
+Total duration needed       = 15.0 seconds
+
+Message 2 starts at: 4.0s
+Message 3 starts at: 4.0s + 3.5s = 7.5s
+Call ends at: 15.0s
+```
+
+#### Audio File Best Practices:
+
+**📁 File Organization:**
+```
+web/assets/
+├── characters/
+│   ├── judy_intro.mp3      (4.0s)
+│   ├── judy_job.mp3        (3.5s)
+│   └── judy_urgent.mp3     (2.8s)
+├── effects/
+│   └── ringtone.mp3
+└── avatars/
+    └── judy.webp
+```
+
+**🎵 Audio Requirements:**
+- **Format**: MP3, OGG, or WAV (MP3 recommended for size)
+- **Quality**: 44.1kHz, 128-192 kbps for voice
+- **Duration**: 3-5 seconds per line (as mentioned)
+- **Volume**: Normalized to prevent audio level inconsistencies
+- **Silence**: Trim leading/trailing silence for precise timing
+
+**⏱️ Timing Tips:**
+- Use audio editing software (Audacity, Adobe Audition) to measure exact durations
+- Test with `/voicetest2` command (when `debug = true`) to verify timing
+- Consider adding slight pauses between sentences for natural flow
+- Account for network latency in timing calculations (add 100-200ms buffer)
+
 ### Update Call Subtitle
 
 ```lua
