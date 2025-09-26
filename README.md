@@ -4,7 +4,7 @@ A FiveM resource that displays cyberpunk-themed call notifications with text-to-
 
 ## Preview 
 
-- 🎥 See what the script looks like inside your server
+- 🎥 Wat the script looks like
 - https://www.youtube.com/watch?v=4H617EoyS1Q
 
 ## Features
