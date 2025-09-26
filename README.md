@@ -487,16 +487,32 @@ SafeCallNotification({
 
 ## Commands
 
-### Testing Commands
+### Testing Commands (Debug Mode Only)
+
+**⚠️ Debug Required**: The following commands only work when `debug = true` is set in `config.lua`:
+
 - `/voicetest1` - Test ElevenLabs TTS mode with AI voice generation
-- `/voicetest2` - Test local files mode with audio file playback
-- `/rizo-test` - Complete demo conversation with multiple dialog lines
+- `/voicetest2` - Test local files mode with audio file playback (3-message sequence)
 
 ### Development Commands
 - `/nui-unlock` - Unlock NUI overlay for development/debugging
 
 ### Debug Mode
-Set `debug = true` in `config.lua` to enable detailed logging for troubleshooting. When enabled, all debug messages will be displayed in the console to help track call flow, timer events, and key presses.
+
+Set `debug = true` in `config.lua` to enable:
+
+1. **Detailed Console Logging** - Track call flow, timer events, key presses, and system operations
+2. **Test Commands Access** - Unlock `/voicetest1` and `/voicetest2` commands for testing both modes
+3. **Enhanced Error Information** - More detailed error messages and system state information
+
+```lua
+RizoSpeechConfig = {
+  debug = true,  -- Enable debug mode and test commands
+  -- ... other settings
+}
+```
+
+**Production Note**: Set `debug = false` in production environments to disable test commands and reduce console output.
 
 ## File Structure
 

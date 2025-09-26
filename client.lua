@@ -887,8 +887,14 @@ RegisterCommand('nui-unlock', function()
   end)
 end)
 
--- Test command for ElevenLabs TTS mode
+-- Test command for ElevenLabs TTS mode (debug only)
 RegisterCommand('voicetest1', function()
+  -- Only allow in debug mode
+  if not getConfig().debug then
+    print("[rizo-cyberpunkcall] voicetest1 is only available when debug = true in config.lua")
+    return
+  end
+
   debugPrint("Starting ElevenLabs TTS test call")
 
   -- Temporarily set mode to elevenlabs for this test
@@ -900,7 +906,7 @@ RegisterCommand('voicetest1', function()
     name = 'ELEVENLABS TEST',
     subtitle = 'Testing AI voice generation with ElevenLabs API',
     duration = 8000,
-    voice_id = 'JBFqnCBsd6RMkjVDRZzb', -- Default voice from config
+    voice_id = 'm1Edok6RLyT2Hz3OljNi', -- Default voice from config
     volume = 1.0
   })
 
@@ -918,8 +924,14 @@ RegisterCommand('voicetest1', function()
   testHandler = AddEventHandler('rizo-cyberpunkcall:callAnswered', onTestCallAnswered)
 end)
 
--- Test command for Local files mode
+-- Test command for Local files mode (debug only)
 RegisterCommand('voicetest2', function()
+  -- Only allow in debug mode
+  if not getConfig().debug then
+    print("[rizo-cyberpunkcall] voicetest2 is only available when debug = true in config.lua")
+    return
+  end
+
   debugPrint("Starting local files test call")
 
   -- Temporarily set mode to local for this test
@@ -932,7 +944,7 @@ RegisterCommand('voicetest2', function()
     name = 'JUDY ALVAREZ',
     subtitle = 'Hey V, you got a minute?',
     duration = 15000, -- Extended duration for 3 messages
-    sound = 'assets/localtestvoice', -- Same sound file for all messages
+    sound = 'assets/localtestvoice.mp3', -- Same sound file for all messages
     volume = 1.0
   })
 
@@ -954,7 +966,7 @@ RegisterCommand('voicetest2', function()
       exports['rizo-cyberpunkcall']:UpdateCallSubtitle(
         'JUDY ALVAREZ',
         'I found something interesting about the relic.',
-        'assets/localtestvoice', -- Same sound file
+        'assets/localtestvoice.mp3', -- Same sound file
         1.0
       )
     end)
@@ -965,7 +977,7 @@ RegisterCommand('voicetest2', function()
       exports['rizo-cyberpunkcall']:UpdateCallSubtitle(
         'JUDY ALVAREZ',
         'Meet me at the workshop when you can.',
-        'assets/localtestvoice', -- Same sound file
+        'assets/localtestvoice.mp3', -- Same sound file
         1.0
       )
     end)
@@ -1025,102 +1037,6 @@ RegisterNUICallback('callAction', function(data, cb)
   if cb then cb({ ok = true }) end
 end)
 
--- ===== Demo (works in both modes) =====
--- In "local" mode, fill "sound" with files in assets/*.ogg
--- In "elevenlabs" mode, you can omit "sound" and optionally set "voice_id"/"model_id"
-RegisterCommand('rizo-test', function()
-  local dialog = {
-    {
-      avatar   = 'assets/judy.webp',
-      name     = 'JUDY ALVAREZ',
-      subtitle = "No, I'm tryin' to get you. Know someone at Clouds who'll take our side.",
-      sound    = 'assets/localtestvoice',  -- used in local mode
-      volume   = 1.0,
-      duration = 4000
-    },
-    {
-      name     = 'JUDY',
-      subtitle = "Meet me at Lizzie's. Come alone.",
-      sound    = 'assets/localtestvoice',
-      volume   = 1.0,
-      duration = 5000
-    },
-    {
-      name     = 'JUDY',
-      subtitle = "Hurry up, it's important.",
-      sound    = 'assets/localtestvoice',
-      volume   = 1.0,
-      duration = 4000
-    }
-  }
-
-  -- total sum
-  local totalDuration = 0
-  for i = 1, #dialog do
-    totalDuration = totalDuration + (dialog[i].duration or 0)
-  end
-  if getConfig().precall.enabled then totalDuration = totalDuration + (getConfig().precall.ms or 0) end
-
-  -- first speech opens the panel
-  local first = dialog[1]
-  exports['rizo-cyberpunkcall']:ShowCallNotification({
-    avatar   = first.avatar,
-    name     = first.name,
-    subtitle = first.subtitle,
-    duration = totalDuration,
-    sound    = first.sound,  -- will be ignored in AI mode
-    volume   = first.volume,
-    precallMs = getConfig().precall.ms
-  })
-
-  -- Only play dialog if call is answered
-  local function playDialog(idx)
-    local line = dialog[idx]
-    if not line then return end
-    if idx > 1 then
-      exports['rizo-cyberpunkcall']:UpdateCallSubtitle(
-        line.name, line.subtitle, line.sound, line.volume, nil
-      )
-    end
-    SetTimeout(line.duration, function()
-      playDialog(idx + 1)
-    end)
-  end
-
-  -- Event handler references for cleanup
-  local answeredHandler = nil
-  local rejectedHandler = nil
-  local timeoutHandler = nil
-
-  -- Listen for call answered event to start dialog
-  local function onCallAnswered()
-    -- Remove all event handlers
-    if answeredHandler then RemoveEventHandler(answeredHandler) end
-    if rejectedHandler then RemoveEventHandler(rejectedHandler) end
-    if timeoutHandler then RemoveEventHandler(timeoutHandler) end
-
-    playDialog(1)
-
-    -- fail-safe cleanup after total duration
-    SetTimeout(totalDuration, function()
-      SendNUIMessage({ action = 'hide' })
-      SendNUIMessage({ action = 'voice:stop' })
-    end)
-  end
-
-  -- Cleanup if call is rejected or times out
-  local function onCallNotAnswered()
-    -- Remove all event handlers
-    if answeredHandler then RemoveEventHandler(answeredHandler) end
-    if rejectedHandler then RemoveEventHandler(rejectedHandler) end
-    if timeoutHandler then RemoveEventHandler(timeoutHandler) end
-  end
-
-  -- Register event handlers and store references
-  answeredHandler = AddEventHandler('rizo-cyberpunkcall:callAnswered', onCallAnswered)
-  rejectedHandler = AddEventHandler('rizo-cyberpunkcall:callRejected', onCallNotAnswered)
-  timeoutHandler = AddEventHandler('rizo-cyberpunkcall:callTimeout', onCallNotAnswered)
-end)
 
 -- ===== EXPORTED FUNCTIONS =====
 -- Original implementations are used (lines 753, 857, etc.)
