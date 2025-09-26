@@ -2,6 +2,11 @@
 
 A FiveM resource that displays cyberpunk-themed call notifications with text-to-speech functionality, inspired by the Cyberpunk 2077 game aesthetic.
 
+## Preview 
+
+- 🎥 See what the script looks like inside your server
+- https://www.youtube.com/watch?v=4H617EoyS1Q
+
 ## Features
 
 - 🎮 Cyberpunk 2077-inspired call interface
