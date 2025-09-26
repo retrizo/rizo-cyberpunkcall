@@ -1,0 +1,550 @@
+/* ===== Base (PB) ===== */
+:root{
+  /* Paleta preto & branco */
+  --bg:        #000000;   /* fundos gerais, quando aplicável */
+  --panel:     #0e0e0f;   /* placas/painéis */
+  --surface:   #111213;   /* superfícies internas */
+  --stroke:    #2a2a2a;   /* borda sutil */
+  --ink:       #f2f2f2;   /* texto claro */
+  --muted:     #bdbdbd;   /* texto secundário */
+
+  /* “Neons” em PB */
+  --neon-1: #ffffff;
+  --neon-2: #ffffff;
+  --neon-3: #d9d9d9;
+
+  /* Sombras/brilhos em PB */
+  --glow:     0 0 12px rgba(255,255,255,.25);
+  --glow-mag: 0 0 14px rgba(255,255,255,.18);
+  --shadow:   0 12px 30px rgba(0,0,0,.55);
+
+  --radius: 10px;
+  --bevel:  12px;
+}
+
+*{ box-sizing: border-box; }
+html,body { margin:0; padding:0; }
+body{
+  background: transparent;
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Inter", Arial, sans-serif;
+  pointer-events: none;
+}
+#cyber-ui{ position:fixed; inset:0; }
+
+/* ===== Painel de ligação (PB) ===== */
+#call-panel{
+  position:absolute;
+  top:18%;
+  left:42px;
+  width:250px;
+  background: linear-gradient(180deg, rgba(17,18,19,.96), rgba(17,18,19,.72));
+  border:1px solid var(--stroke);
+  border-left:3px solid #fff;          /* destaque PB */
+  border-radius: clamp(8px, 1vw, 10px);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(2px);
+  padding:12px;
+  transform: skewX(-1.2deg);
+  animation: panelIn .25s ease-out both;
+}
+@keyframes panelIn{
+  from{ opacity:0; transform: translateY(10px) skewX(-1.2deg); }
+  to{   opacity:1; transform: translateY(0)    skewX(-1.2deg); }
+}
+
+.panel-chrome{ position:absolute; inset:0; pointer-events:none; }
+/* fitas em tons de cinza */
+.tape{
+  position:absolute;
+  width:82px; height:18px;
+  background: linear-gradient(90deg, #2a2a2a, #1a1a1a);
+  transform: rotate(-8deg);
+  opacity:.9;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
+  border-radius:3px;
+}
+.tape-1{ top:-8px; left:10px; }
+.tape-2{ top:6px; right:-10px; transform: rotate(12deg); width:68px; }
+
+/* "sticker" PB */
+.sticker {
+  display: none !important;
+}
+
+.barcode{
+  position:absolute; bottom:8px; right:10px; width:64px; height:18px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.85) 0 2px, transparent 2px 4px),
+    linear-gradient(0deg, rgba(255,255,255,.08), rgba(255,255,255,0));
+  opacity:.16; border-radius:3px;
+}
+
+/* ===== Avatar: borda PB + glow pulsando ===== */
+.avatar-wrap{
+  position:relative;
+  display:inline-block;
+  overflow:hidden;         /* não deixa vazar nos cantos */
+  border-radius:8px;       /* raio unificado */
+  outline:2px solid #333;
+  box-shadow: 0 0 8px rgba(255,255,255,.15);
+}
+
+.avatar-wrap img{
+  width:100%;
+  display:block;
+  filter: contrast(1.05) saturate(1);
+  position:relative;
+  z-index:2;
+  border-radius:8px;       /* igual ao wrap */
+}
+
+/* Glow que acende e apaga (sem “percurso”) */
+.avatar-wrap::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:8px;
+  pointer-events:none;
+  z-index:3;
+
+  border:2px solid rgba(40,40,40,.7); /* preto claro na borda */
+  box-shadow:
+    0 0 6px rgba(20,20,20,.3),
+    0 0 16px rgba(20,20,20,.25),
+    0 0 32px rgba(20,20,20,.2);
+
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse{
+  0% {
+    opacity: 0.4;
+    box-shadow:
+      0 0 6px rgba(20,20,20,.3),
+      0 0 16px rgba(20,20,20,.25),
+      0 0 32px rgba(20,20,20,.2);
+  }
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 8px rgba(30,30,30,.55),
+      0 0 20px rgba(30,30,30,.45),
+      0 0 40px rgba(30,30,30,.35);
+  }
+  100% {
+    opacity: 0.4;
+    box-shadow:
+      0 0 6px rgba(20,20,20,.3),
+      0 0 16px rgba(20,20,20,.25),
+      0 0 32px rgba(20,20,20,.2);
+  }
+}
+
+
+/* cantos PB com pulso (sobre a imagem) */
+.corner{
+  position:absolute; width:18px; height:18px;
+  border:2px solid #ffffff;
+  box-shadow: 0 0 6px rgba(255,255,255,.40);
+  z-index:4;                               /* acima do ::before */
+  pointer-events:none;
+  animation: cornerPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes cornerPulse{
+  0%{
+    box-shadow: 0 0 6px rgba(255,255,255,.40);
+    border-color: rgba(255,255,255,.8);
+  }
+  100%{
+    box-shadow: 0 0 12px rgba(255,255,255,.8);
+    border-color: rgba(255,255,255,1);
+  }
+}
+
+.corner.tl{ top:6px; left:6px; border-right:none; border-bottom:none; }
+.corner.tr{ top:6px; right:6px; border-left:none; border-bottom:none; animation-delay:0.5s; }
+.corner.bl{ bottom:6px; left:6px; border-right:none; border-top:none; animation-delay:1s; }
+.corner.br{ bottom:6px; right:6px; border-left:none; border-top:none; animation-delay:1.5s; }
+
+/* ===== Dados/códigos orbitando ===== */
+.data-orbit{
+  position:absolute;
+  inset:-12px;
+  border-radius:50%;
+  pointer-events:none;
+}
+.data-orbit::before,
+.data-orbit::after{
+  content:"01";
+  position:absolute;
+  font-family: "Courier New", monospace;
+  font-size:8px;
+  font-weight:bold;
+  color:#ffffff;
+  text-shadow: 0 0 4px rgba(255,255,255,.6);
+  width:16px;
+  height:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(0,0,0,.7);
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:3px;
+  animation: orbitData 6s linear infinite;
+}
+.data-orbit::after{
+  content:"FF";
+  animation: orbitData 6s linear infinite reverse;
+  animation-delay: -3s;
+}
+@keyframes orbitData{
+  0%{   transform: rotate(0deg) translateX(45px) rotate(0deg);   opacity:1; }
+  25%{  opacity:.6; }
+  50%{  transform: rotate(180deg) translateX(45px) rotate(-180deg); opacity:1; }
+  75%{  opacity:.6; }
+  100%{ transform: rotate(360deg) translateX(45px) rotate(-360deg); opacity:1; }
+}
+
+/* ===== Etiqueta de nome (PB) ===== */
+.tag-name{
+  margin-top:8px;
+  width:fit-content;
+  padding:6px 10px 6px 28px;
+  background: linear-gradient(90deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+  border:1px dashed rgba(255,255,255,.30);
+  border-radius: 8px;
+  color: #ffffff;
+  letter-spacing:.08em; font-weight:800; font-size:13px;
+  position:relative;
+  text-shadow: var(--glow-mag);
+}
+.tag-name::before{
+  content:"◎";
+  position:absolute; left:8px; top:50%; transform:translateY(-54%);
+  font-size:12px; color:#ffffff;
+}
+
+/* ===== Legenda (ribbon) — PB retangular ===== */
+#subtitle{
+  position:absolute; bottom:8%; left:50%;
+  transform:translateX(-50%);
+  width:min(100%, 1100px);
+}
+.subtitle-ribbon{
+  display:flex; align-items:center; gap:12px;
+  margin:0 auto; width:fit-content; max-width:92%;
+  background: rgba(0,0,0,.85);
+  border:1px solid #333;
+  border-radius: 8px;
+  padding:12px 18px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.6);
+  backdrop-filter: blur(2px);
+  position:relative;
+}
+.subtitle-ribbon::after{
+  content:""; position:absolute; inset:0;
+  border-radius:inherit; pointer-events:none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+
+/* chips */
+.chip-name{
+  background: rgba(255,255,255,.10);
+  border:1px solid #555;
+  color:#ffffff;
+  font-weight:700; letter-spacing:.05em;
+  padding:6px 12px; border-radius:6px;
+  text-shadow: 0 0 8px rgba(255,255,255,.20);
+}
+.chip-text{
+  color:#f5f5f5;
+  font-weight:500; letter-spacing:.02em;
+}
+
+/* equalizer PB */
+.eq{ display:flex; gap:4px; align-items:flex-end; height:18px; margin-left:6px;}
+.eq span{
+  width:3px;
+  background: linear-gradient(180deg, #ffffff, rgba(255,255,255,0));
+  border-radius:2px; opacity:.85;
+  animation: eq 1.2s ease-in-out infinite;
+}
+.eq span:nth-child(2){ animation-delay:.12s; }
+.eq span:nth-child(3){ animation-delay:.24s; }
+.eq span:nth-child(4){ animation-delay:.36s; }
+.eq span:nth-child(5){ animation-delay:.48s; }
+@keyframes eq{
+  0%,100%{ height:4px; }
+  50%   { height:18px; }
+}
+
+/* ===== Overlays ===== */
+.grain{
+  position:fixed; inset:0; pointer-events:none; opacity:.08; mix-blend-mode:soft-light;
+  background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+.scanline{
+  position:fixed; inset:0; pointer-events:none; opacity:.06;
+  background: repeating-linear-gradient(180deg, rgba(255,255,255,.08) 0 1px, transparent 1px 3px);
+}
+
+/* ===== Util ===== */
+.hidden{ display:none !important; }
+
+/* ===== MINI HUD: "pessoa ligando" (PB) ===== */
+#precall{
+  position:absolute;
+  top:95%;   /* <-- esse valor controla a altura */
+  left:36px;
+  pointer-events:none;
+}
+
+.precall-chip{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  background: rgba(0,0,0,.88);
+  border:1px solid #333;
+  border-left:3px solid #fff;       /* destaque PB */
+  border-radius:8px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  animation: precallIn .22s ease-out both;
+}
+
+.precall-label{
+  font-size:11px;
+  letter-spacing:.14em;
+  font-weight:800;
+  color:#ffffff;
+  opacity:.9;
+  text-shadow: 0 0 8px rgba(255,255,255,.15);
+}
+
+.precall-name{
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.06em;
+  color:#ffffff;
+  text-shadow: 0 0 10px rgba(255,255,255,.25);
+}
+
+@keyframes precallIn{
+  from{ opacity:0; transform: translateY(6px); }
+  to  { opacity:1; transform: translateY(0); }
+}
+
+/* leve fade-out quando some */
+.precall-hide{
+  animation: precallOut .2s ease-in forwards;
+}
+@keyframes precallOut{
+  to{ opacity:0; transform: translateY(-6px); }
+}
+
+/* =========================
+   MINI HUD CYBERPUNK (PB)
+   ========================= */
+:root{
+  /* Acentos – deixe branco p/ PB puro */
+  --holo-cyan: rgba(255,255,255,.9);   /* ex: ciano: rgba(120,255,255,.9) */
+  --holo-red:  rgba(255,255,255,.85);  /* ex: vermelho: rgba(255,90,90,.9) */
+  --holo-dim:  rgba(255,255,255,.25);
+}
+
+#precall{
+  position:absolute;
+  top:32%;
+  left:36px;
+  pointer-events:none;
+  filter: drop-shadow(0 12px 28px rgba(0,0,0,.45));
+  perspective: 800px;
+}
+
+.precall-3d{
+  position: relative;
+  animation: floatY 3s ease-in-out infinite;
+}
+
+@keyframes floatY{
+  0%,100%{ transform: translateY(0) }
+  50%    { transform: translateY(-4px) }
+}
+
+/* Trilho de ícones/LEDs */
+.precall-rail{
+  position:absolute;
+  left:-22px;
+  top:6px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.rail-signal{
+  width:8px; height:8px; border:1px solid #2a2a2a; border-radius:2px;
+  background: rgba(0,0,0,.8);
+  box-shadow: inset 0 0 8px var(--holo-dim), 0 0 10px rgba(0,0,0,.4);
+  animation: blink 1.6s steps(2,end) infinite;
+}
+.rail-signal:nth-child(2){ animation-delay:.2s }
+.rail-signal:nth-child(3){ animation-delay:.4s }
+@keyframes blink{
+  50%{ box-shadow: inset 0 0 10px var(--holo-cyan), 0 0 18px var(--holo-cyan) }
+}
+
+/* Cartão */
+.precall-card{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  padding:12px 14px;
+  background: linear-gradient(180deg, rgba(0,0,0,.92), rgba(0,0,0,.82));
+  border:1px solid #2f2f2f;
+  border-left:3px solid #fff; /* destaque PB */
+  border-radius:10px;
+  transform: rotateX(6deg) rotateY(-8deg);
+  transform-style: preserve-3d;
+  position:relative;
+  overflow:hidden;
+}
+.precall-card::before{
+  content:'';
+  position:absolute; inset:-1px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;
+  pointer-events:none;
+}
+.precall-card::after{ /* brilho de borda */
+  content:'';
+  position:absolute; inset:-40%;
+  background: radial-gradient(60% 60% at 20% 20%, var(--holo-dim), transparent 60%);
+  transform: translateZ(30px);
+  opacity:.5; pointer-events:none;
+}
+
+/* Avatar com “fatias” */
+.precall-avatar{
+  position:relative;
+  width:58px; height:58px;
+  border:1px solid #333;
+  border-radius:6px;
+  overflow:hidden;
+  box-shadow: inset 0 0 18px rgba(0,0,0,.6);
+  transform: translateZ(20px);
+}
+.precall-avatar img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter: contrast(1.05) brightness(.95);
+}
+.precall-avatar .slice{
+  position:absolute; left:0; right:0; height:1px; background: rgba(255,255,255,.08);
+  animation: scan 2.4s linear infinite;
+}
+.slice.s1{ top:25% }
+.slice.s2{ top:55%; animation-delay:.4s }
+.slice.s3{ top:80%; animation-delay:.8s }
+
+@keyframes scan{
+  0%{ transform: translateX(-100%) }
+  100%{ transform: translateX(100%) }
+}
+
+/* Texto/infos */
+.precall-info{ transform: translateZ(40px) }
+.precall-title{
+  font-size:11px; letter-spacing:.18em; font-weight:800;
+  color: var(--holo-red);
+  text-shadow: 0 0 10px var(--holo-dim);
+  opacity:.95;
+}
+.precall-name{
+  margin-top:2px;
+  font-size:16px; letter-spacing:.06em; font-weight:900;
+  color:#fff;
+  text-shadow:
+    0 0 12px var(--holo-dim),
+    0 0 24px var(--holo-dim);
+}
+
+/* Ações "ANSWER/REJECT" como chips */
+.precall-actions{
+  margin-top:8px; display:flex; gap:8px;
+}
+.action-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--ink);
+  backdrop-filter: blur(2px);
+}
+.action-chip i {
+  font-size: 13px;
+  color: #fff;
+}
+.action-chip.accept i { color: #00ff9d; }   /* verde neon */
+.action-chip.reject i { color: #ff2e2e; }   /* vermelho neon */
+
+/* Key hints */
+.key-hint {
+  background: rgba(255,255,255,.2);
+  color: #000;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,.3);
+  min-width: 18px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,.3);
+}
+.action-chip.accept .key-hint {
+  background: #00ff9d;
+  color: #000;
+  border-color: #00ff9d;
+}
+.action-chip.reject .key-hint {
+  background: #ff2e2e;
+  color: #fff;
+  border-color: #ff2e2e;
+}
+
+.lbl {
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Grade/scanline atrás do cartão */
+.precall-grid{
+  position:absolute; inset:-12px -16px -16px -18px; z-index:-1;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.02) 0 1px, transparent 1px 4px);
+  mask: radial-gradient(80% 80% at 20% 20%, #000 0%, transparent 70%);
+  animation: gridGlow 2.6s ease-in-out infinite;
+}
+@keyframes gridGlow{
+  0%,100%{ opacity:.45 }
+  50%    { opacity:.7 }
+}
+
+/* aparições/desaparições */
+#precall .precall-card{ animation: precallIn .22s ease-out both; }
+.precall-hide .precall-card{ animation: precallOut .2s ease-in forwards; }
+
+@keyframes precallIn{
+  from{ opacity:0; transform: translateY(8px) rotateX(10deg) rotateY(-10deg); }
+  to  { opacity:1; transform: rotateX(6deg) rotateY(-8deg); }
+}
+@keyframes precallOut{
+  to{ opacity:0; transform: translateY(-8px) rotateX(12deg) rotateY(-12deg); }
+}

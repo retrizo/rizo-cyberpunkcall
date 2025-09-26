@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>daydream-speech</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+  <audio id="precall-audio" src="assets/precall.ogg" preload="auto"></audio>
+  <!-- Player dedicado para as falas em .ogg -->
+  <audio id="line-audio" preload="auto" style="display:none"></audio>
+
+  <div id="cyber-ui">
+    <!-- MINI HUD: "pessoa ligando" -->
+    <div id="precall" class="hidden">
+      <div class="precall-3d">
+        <div class="precall-rail">
+          <div class="rail-signal"></div>
+          <div class="rail-signal"></div>
+          <div class="rail-signal"></div>
+        </div>
+
+        <div class="precall-card">
+          <div class="precall-avatar">
+            <img id="precall-avatar" src="assets/judy.webp" alt="avatar" />
+            <span class="slice s1"></span>
+            <span class="slice s2"></span>
+            <span class="slice s3"></span>
+          </div>
+
+          <div class="precall-info">
+            <div class="precall-title">LIGAÇÃO</div>
+            <div id="precall-name" class="precall-name">UNKNOWN</div>
+
+            <div class="precall-actions" id="precall-actions">
+              <div class="action-chip accept">
+                <i class="fa-solid fa-phone"></i>
+                <span class="key-hint" id="answer-key">E</span>
+                <span class="lbl">ANSWER</span>
+              </div>
+              <div class="action-chip reject">
+                <i class="fa-solid fa-phone-slash"></i>
+                <span class="key-hint" id="reject-key">R</span>
+                <span class="lbl">REJECT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="precall-grid"></div>
+      </div>
+    </div>
+
+    <!-- Painel de ligação (esquerda) -->
+    <div id="call-panel" class="hidden">
+      <div class="panel-chrome">
+        <div class="tape tape-1"></div>
+        <div class="tape tape-2"></div>
+        <div class="sticker">AO VIVO</div>
+        <div class="barcode"></div>
+      </div>
+
+      <div class="avatar-wrap">
+        <img id="avatar" src="assets/judy.webp" alt="avatar" />
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+        <div class="data-orbit"></div>
+      </div>
+
+      <div id="caller-name" class="tag-name">UNKNOWN</div>
+    </div>
+
+    <!-- Legenda inferior (ribbon) -->
+    <div id="subtitle" class="hidden">
+      <div class="subtitle-ribbon">
+        <span id="subtitle-name" class="chip-name">NAME</span>
+        <span id="subtitle-text" class="chip-text">Subtitle text</span>
+        <div class="eq"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+    </div>
+
+    <div class="grain"></div>
+    <div class="scanline"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
