@@ -716,15 +716,6 @@ RizoSpeechConfig = {
 - FiveM Server
 - NUI-compatible framework
 - (Optional) ElevenLabs API access for TTS functionality
-- Server-side resource for TTS processing
-
-## Contributing
-
-Feel free to submit issues, feature requests, or pull requests to improve this resource.
-
-## License
-
-This project is open source. Please check the license file for more information.
 
 ## Credits
 
